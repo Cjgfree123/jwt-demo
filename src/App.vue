@@ -11,15 +11,8 @@
 
 
 <script>
-import { getTest } from './api/index';
-
-console.log(11, getTest);
 export default {
-  mounted() {
-    getTest().then((data) => {
-      console.log('data', data);
-    });
-  },
+  
 };
 </script>
 <style>

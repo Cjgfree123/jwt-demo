@@ -1,7 +1,6 @@
 <template>
   <div class="profile">
-    <h1>个人中心</h1>
-    <h2>用户名: </h2>
+    <h2>用户名: {{this.$store.state.username}}</h2>
   </div>
 </template>
 

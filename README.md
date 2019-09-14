@@ -15,14 +15,9 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
+### Run your server
 ```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
+nodemon server.js
 ```
 
 ### 页面汇总
@@ -44,5 +39,70 @@ npm run lint
         响应拦截: 
     * 请求拦截顺序，与代码中的拦截顺序保持一致。
 3.抽离请求 api/index.js(promise对象)
+
+```
+
+## axios拦截器
+
+1. 实现拦截器
+
+```
+import axios from 'axios';
+
+// 配置请求的接口地址
+axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '/';
+
+axios.interceptors.request.use((config) => {
+  console.log(1);
+  return config;
+});
+
+axios.interceptors.request.use((config) => {
+  console.log(2);
+  return config;
+});
+
+export default axios;
+```
+
+2. 上面缺点: 每调用一次axios,将会生成一个axios实例, axios的拦截器方法将会被调用一次。
+
+改进:
+
+```
+import axios from 'axios';
+
+class Request {
+    constructor() {
+        this.baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '/';
+        this.timeout = 2000;
+    }
+    request(config) { // 用户自定义的请求头
+        axios.defaults.baseURL = this.baseURL;
+        axios.defaults.timeout = this.timeout;
+        // 请求拦截器
+        axios.interceptors.request.use((config) => {
+            config.headers.Authorization = "token"; // 共用请求头
+            return config;
+        }, (err) => {
+            return Promise.reject(err);
+        });
+        // 响应拦截器
+        axios.interceptors.response.use((res) => res.data, (err) => Promise.reject(err));
+        return axios(config);
+    }
+};
+
+export default new Request();
+
+```
+
+调用:
+
+```
+import axios from '../lib/request';
+
+// 返回promise
+export const getTest = () => axios.request({ url: '/test' });
 
 ```

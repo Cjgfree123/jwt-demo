@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const secret = 'zfjg';
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
@@ -15,12 +16,12 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-const secret = 'zfjg';
 
 app.get('/test', (req, res) => {
   res.send({ test: 'test' });
 });
 
+// 1. 拿用户名,登录
 app.post(('/login'), (req, res) => {
   const { username } = req.body;
   if (username === 'admin') {
@@ -43,6 +44,26 @@ app.post(('/login'), (req, res) => {
       data: '该用户不存在',
     });
   }
+});
+
+// 2. 验证token的可靠性
+app.get("/validate", (req, res) => {
+    const token = req.headers.authorization;
+    jwt.verify(token, secret, (err, decode) => {
+        if(err){
+            return res.json({
+                code: 1,
+                data: "token失效了"
+            });
+        };
+        res.json({
+            username: decode.username,
+            code: 0,
+            token: jwt.sign({username: "admin"},secret, {
+                expiresIn: 20,
+            })
+        })
+    })
 });
 
 app.listen(3000, () => {
