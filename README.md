@@ -115,7 +115,7 @@ export const getTest = () => axios.request({ url: '/test' });
 
 ```
 
-## 用户信息
+## 小收获
 
 1. 
 ```
@@ -124,4 +124,26 @@ export const getTest = () => axios.request({ url: '/test' });
 
    为何不将userId + token 存到vuex? 
    防止一刷新, 用户数据丢失。
+```
+
+2. async 没有拦截住
+
+分析:
+
+```
+1. 没找到bebel-loader, 缺少Babel插件,并进行安装相关插件,结果报错。
+2. 发现之前vue-cli3项目，可以正常使用async
+3. 猜测: vue-cli3 支持async, 我的写法不对,或接口报错
+```
+
+解决:
+
+```
+错误原因:
+1. 发现接口: 没有返回data:{}
+2. 请求封装, 默认从data下面取数据。但是读不到接口的data,就返回un. 
+
+改进:
+1. 请求封装,从res直接读数据(更容易定位问题)
+2. 所有接口, 必须返回code+data数据。
 ```
