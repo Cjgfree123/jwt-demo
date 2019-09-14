@@ -43,6 +43,6 @@ npm run lint
         请求拦截: 会在请求的时候, 拦截当前请求
         响应拦截: 
     * 请求拦截顺序，与代码中的拦截顺序保持一致。
-3.抽离请求 api/index.js
+3.抽离请求 api/index.js(promise对象)
 
 ```
