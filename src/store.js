@@ -16,23 +16,20 @@ export default new Vuex.Store({
   actions: {
     async validate({ commit }) {
       const r = await validate();
-      if (r.code === 1) {
+      if (r && r.data && r.data.code === 1) {
         return false;
       };
-      localStorage.setItem("token", r.token);
-      console.log("tt", r.token)
-      commit("setUsername", r.username);
+      localStorage.setItem("token",r && r.data && r.data.token);
+      commit("setUsername",r && r.data && r.data.username);
       return true;
     },
     async login({ commit }, username) {
       const r = await login(username);
-      console.log(")))))", r)
-      if (r.code === 1) {
+      if (r.data && r.data.data && r.data.data.code === 1) {
         return Promise.reject(r);
       };
-      console.log("-----", r)
-      localStorage.setItem("token", r && r.token);
-      commit("setUsername", r.username);
+      localStorage.setItem("token",  r.data && r.data.data && r.data.data.token);
+      commit("setUsername", r.data && r.data.data && r.data.data.username);
     },
   },
 });

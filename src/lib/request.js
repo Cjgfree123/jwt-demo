@@ -13,10 +13,10 @@ class Request {
             config.headers.Authorization = localStorage.getItem("token"); // 共用请求头
             return config;
         }, (err) => {
-            return Promise.reject(err);
+            return Promise.reject(err && err.data && err.data.data && err.data.data.msg);
         });
         // 响应拦截器
-        axios.interceptors.response.use((res) => res.data, (err) => Promise.reject(err));
+        axios.interceptors.response.use((res) => res, (err) => Promise.reject(err));
         return axios(config);
     }
 };

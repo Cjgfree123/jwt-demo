@@ -144,6 +144,6 @@ export const getTest = () => axios.request({ url: '/test' });
 2. 请求封装, 默认从data下面取数据。但是读不到接口的data,就返回un. 
 
 改进:
-1. 请求封装,从res直接读数据(更容易定位问题)
+1. 建议:请求封装,从res直接读数据(更容易定位问题)
 2. 所有接口, 必须返回code+data数据。
 ```
