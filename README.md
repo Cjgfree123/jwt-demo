@@ -26,6 +26,9 @@ nodemon server.js
 
 2. login // 登录页面
 
+    * /login // 登录,拿到token
+    * /validate // 进入新路由,判断token失效否&更新token
+
 3. profile // 个人中心页面
 
 ### 实现思路
@@ -39,7 +42,12 @@ nodemon server.js
         响应拦截: 
     * 请求拦截顺序，与代码中的拦截顺序保持一致。
 3.抽离请求 api/index.js(promise对象)
-
+4.token + userid存到localStorage, userInfo存vuex;  异步派发login
+5.beforeEach权限路由
+  每每进入路由前，要校验当前用户的登录情况,通过给store派发validate进行异步校验
+  1. 将本地token传给后端, 如果校验成功,利用响应的token, 更新本地token
+  2. 如果校验失败, 则跳转到登录页
+6. 添加路由白名单, 直接跳转
 ```
 
 ## axios拦截器
@@ -105,4 +113,15 @@ import axios from '../lib/request';
 // 返回promise
 export const getTest = () => axios.request({ url: '/test' });
 
+```
+
+## 用户信息
+
+1. 
+```
+   将用户信息对象,存到vuex, 项目内全局共享.
+   将userId + token, 存到localstorage。
+
+   为何不将userId + token 存到vuex? 
+   防止一刷新, 用户数据丢失。
 ```

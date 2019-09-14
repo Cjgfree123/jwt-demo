@@ -10,7 +10,7 @@ class Request {
         axios.defaults.timeout = this.timeout;
         // 请求拦截器
         axios.interceptors.request.use((config) => {
-            config.headers.Authorization = "token"; // 共用请求头
+            config.headers.Authorization = localStorage.getItem("token"); // 共用请求头
             return config;
         }, (err) => {
             return Promise.reject(err);

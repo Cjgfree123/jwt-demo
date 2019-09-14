@@ -24,6 +24,9 @@ export default new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      meta:{
+        needLogin: true, // 该路由需要登录
+      }
     },
   ],
 });

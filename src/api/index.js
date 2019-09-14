@@ -9,3 +9,7 @@ export const login = (username) => axios.request({
         username,
     }
 });
+
+export const validate = () => axios.request({
+    url: "/validate",
+});
