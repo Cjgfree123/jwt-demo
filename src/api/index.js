@@ -1,7 +1,15 @@
 import axios from '../lib/request';
 
-// 全部是promise
-export const getTest = () => axios.request({ url: '/test' });
+/**
+ * 1. 判断是否已经登录，并返回 userName + token
+ */
+export const validate = () => axios.request({
+    url: "/validate",
+});
+
+/**
+ * 2. 根据username，获取用户信息 
+ */
 export const login = (username) => axios.request({
     url: '/login',
     method: "POST",
@@ -10,6 +18,5 @@ export const login = (username) => axios.request({
     }
 });
 
-export const validate = () => axios.request({
-    url: "/validate",
-});
+// 全部是promise
+// export const getTest = () => axios.request({ url: '/test' });

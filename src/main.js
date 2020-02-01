@@ -13,6 +13,7 @@ router.beforeEach(async (to, from, next) => {
   if (whileList.includes(to.path)) {
     return next();
   };
+  // flag: true已经登录  false:没有登录或登录异常
   let flag = await store.dispatch("validate");
   if (flag) {
     // 如果登录了
@@ -22,12 +23,12 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
   } else {
-    // 如果没登录&需要登录
+    // 如果该路由 没登录&需要登录
     // 注意: 可能匹配多条路径, 但是: 判断时，只要匹配了,就做权限校验
-    const flag = to.matched.some(item => {
+    let needLogin = to.matched.some(item => {
       return item && item.meta && item.meta.needLogin;
     });
-    if (flag) {
+    if (needLogin) {
       next("/login");
     } else {
       next();

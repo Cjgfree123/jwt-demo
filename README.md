@@ -119,8 +119,8 @@ export const getTest = () => axios.request({ url: '/test' });
 
 1. 
 ```
-   将用户信息对象,存到vuex, 项目内全局共享.
    将userId + token, 存到localstorage。
+   将用户信息对象,存到vuex, 项目内全局共享.
 
    为何不将userId + token 存到vuex? 
    防止一刷新, 用户数据丢失。
@@ -147,3 +147,16 @@ export const getTest = () => axios.request({ url: '/test' });
 1. 建议:请求封装,从res直接读数据(更容易定位问题)
 2. 所有接口, 必须返回code+data数据。
 ```
+
+3. 缺点: 
+
+* 每次进入路由，需要先进行请求validate，如果validate请求挂掉，则页面空白、无法进入正常页面。
+
+    改进: 如果有cookie(isLogin), 从cookie读取。 如果没有，再从接口读取。
+
+* 如果手动把token清掉了，前端请求时，会把空token带过去，服务器判断是token失效. 则即使服务器的登录态还没有失效, 登录用户还是无法访问对应页面。[前后端维护的登录态不统一]
+
+    解决: 如果手动清token, 则前端认为没有登录，跳转到登录页。
+     
+         此时，后端判断出是已登录，则打回到项目主页。
+
